@@ -42,6 +42,8 @@ class FfmpegHlCommon extends FfmpegHlPlatform {
   Future<Pair<bool, String>> mergeAudioVideo(
       String audioPath, String videoPath, String outputPath) async {
     final List<String> cmds = [
+      '-err_detect', 'ignore_err',
+      '-fflags', '+discardcorrupt',
       '-i',
       audioPath, // 直接传递变量，不需要加引号
       '-i',
