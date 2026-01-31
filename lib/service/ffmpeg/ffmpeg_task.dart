@@ -193,6 +193,8 @@ class FFmpegTaskController extends GetxController {
 
       //结果pair
       var resultPair = Pair(false, "缺少输入源");
+      ffmpegPlugin.globalArgs("-err_detect", "ignore_err")
+                .globalArgs("-fflags", "+genpts");
 
       //输入路径
       if (audioPath != null && videoPath != null) {
