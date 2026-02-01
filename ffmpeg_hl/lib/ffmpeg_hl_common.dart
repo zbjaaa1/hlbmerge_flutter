@@ -41,15 +41,32 @@ class FfmpegHlCommon extends FfmpegHlPlatform {
   @override
   Future<Pair<bool, String>> mergeAudioVideo(
       String audioPath, String videoPath, String outputPath) async {
-    final List<String> cmds = [
-      '-i',
-      audioPath, // 直接传递变量，不需要加引号
-      '-i',
-      videoPath, // 库会处理好路径中的空格
-      '-c',
-      'copy',
-      outputPath // 无论路径是什么，都会被当作单一参数
-    ];
+  final List<String> cmds = [
+  '-y',
+
+  // ✅ 核心容错
+  '-err_detect', 'ignore_err',
+  '-fflags', '+discardcorrupt',
+
+  // ✅ 限制音视频最大交错间隔（关键）
+  '-max_interleave_delta', '0',
+
+  // 输入顺序：video -> audio
+  '-i', videoPath,
+  '-i', audioPath,
+
+  // 明确映射
+  '-map', '0:v:0',
+  '-map', '1:a:0',
+
+  // 不重编码
+  '-c', 'copy',
+
+  // 可选：对在线播放 / Media3 更友好
+  '-movflags', '+faststart',
+
+  outputPath,
+];
     FFmpegSession session = await FFmpegKit.executeWithArguments(cmds);
     final returnCode = await session.getReturnCode();
     if (ReturnCode.isSuccess(returnCode)) {
