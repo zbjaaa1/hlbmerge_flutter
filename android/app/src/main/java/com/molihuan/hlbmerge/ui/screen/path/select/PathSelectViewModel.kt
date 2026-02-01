@@ -90,6 +90,11 @@ class PathSelectViewModel @Inject constructor() : ViewModel() {
                 R.mipmap.ico_bilibili
             ),
             BiliAppInfo(
+                "PiliPlus",
+                "com.example.piliplus",
+                R.mipmap.ico_piliplus
+            ),
+            BiliAppInfo(
                 "bilimiao",
                 "com.a10miaomiao.bilimiao",
                 R.mipmap.ic_bilimiao_33
